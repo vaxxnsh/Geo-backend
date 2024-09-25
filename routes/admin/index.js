@@ -16,6 +16,6 @@ router.post("/addOffice", addOfficeHandler);
 router.get("/getOfficesByAdminId/:adminId", getOfficesByAdminIdHandler);
 router.get("/getEmployeesByOfficeId/:officeId", getEmployeesByOfficeIdHandler);
 router.get("/getAttendanceByEmpId/:empId", getAttendanceByEmpIdHandler);
-router.post("/getManualAttendanceByEmpId/:empId", getManualAttendanceByEmpIdHandler);
+router.get("/getManualAttendanceByEmpId/:empId", getManualAttendanceByEmpIdHandler);
 
 export default router;
