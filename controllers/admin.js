@@ -7,14 +7,16 @@ import Attendance from "../models/attendance.js";
 import ManualAttendance from "../models/manualAttendance.js";
 
 export const signinHandler = async (req, res) => {
+ 
   const adminPayload = req.body;
+  
   const isValid = adminSigninSchema.safeParse(adminPayload);
 
   if (!isValid.success) {
     res.json({ message: "Invalid Information" });
     return;
   }
-
+  console.log(adminPayload)
   const admin = await Admin.findOne({
     email: adminPayload.email,
     password: adminPayload.password,
@@ -25,7 +27,6 @@ export const signinHandler = async (req, res) => {
 
     res.status(200).json({
       message: "Admin signed in.",
-      admin: admin,
       token: token,
     });
   } else {
@@ -38,14 +39,16 @@ export const signinHandler = async (req, res) => {
 };
 
 export const signupHandler = async (req, res) => {
+  console.log("In handler")
   const adminPayload = req.body;
+  console.log(adminPayload)
   const isValid = adminSignupSchema.safeParse(adminPayload);
 
   if (!isValid.success) {
-    res.json({ message: "Invalid Information" });
+    res.json({ message: isValid.error });
     return;
   }
-
+  
   const adminExists = await Admin.findOne({
     email: adminPayload.email,
   });
@@ -59,14 +62,17 @@ export const signupHandler = async (req, res) => {
       company: adminPayload.company,
     });
 
+    const token = await jwt.sign({ admin }, process.env.JWT_SECRET);
+
     res.status(200).json({
       message: "Admin created.",
       admin: admin,
+      token
     });
   } else {
     res.status(200).json({
       message: "Admin exists.",
-      admin: null,
+      admin: null
     });
   }
 };
